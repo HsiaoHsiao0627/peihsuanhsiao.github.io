@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>蕭姵萱 Pei-Hsuan Hsiao — AI × 邏輯</title>
+<meta name="description" content="蕭姵萱｜資訊管理與哲學雙主修，專注 RAG、推薦系統與 LLM 應用開發">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F8F7F3;
+    --paper-raised:#FFFFFF;
+    --ink:#1E2A38;
+    --ink-soft:#5B6472;
+    --ink-faint:#8B93A0;
+    --brass:#A6742C;
+    --brass-soft:#C99A4A;
+    --line:#DDD8CC;
+    --line-soft:#E9E5DA;
+    --maxw:760px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    font-size:16px;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+  }
+  ::selection{background:var(--brass-soft); color:#fff;}
+  a{color:var(--ink); text-decoration:none;}
+  a:focus-visible, button:focus-visible{outline:2px solid var(--brass); outline-offset:3px;}
+
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 28px;}
+
+  /* ---- Nav / lang switch ---- */
+  .topbar{
+    position:sticky; top:0; z-index:50;
+    background:rgba(248,247,243,0.88);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line-soft);
+  }
+  .topbar-inner{
+    max-width:var(--maxw); margin:0 auto; padding:14px 28px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .topbar-name{
+    font-family:'Newsreader', serif; font-weight:500; font-size:17px; letter-spacing:0.01em;
+  }
+  .lang-switch{
+    display:flex; align-items:center; gap:0;
+    border:1px solid var(--ink); border-radius:999px;
+    font-family:'IBM Plex Mono', monospace; font-size:12px;
+    overflow:hidden; background:var(--paper-raised);
+  }
+  .lang-switch button{
+    border:none; background:transparent; cursor:pointer;
+    padding:6px 14px; color:var(--ink-soft); font-family:inherit; font-size:inherit;
+    transition:background 0.2s, color 0.2s;
+  }
+  .lang-switch button.active{background:var(--ink); color:var(--paper);}
+
+  /* ---- Hero ---- */
+  .hero{padding:76px 0 48px;}
+  .hero-eyebrow{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:0.12em;
+    color:var(--brass); text-transform:uppercase; margin:0 0 18px;
+  }
+  .hero h1{
+    font-family:'Newsreader', serif; font-weight:500; font-size:46px; line-height:1.15;
+    margin:0 0 6px; letter-spacing:-0.01em;
+  }
+  .hero h1 em{font-style:italic; color:var(--brass); font-weight:500;}
+  .hero .en-name{
+    font-family:'IBM Plex Mono', monospace; font-size:14px; color:var(--ink-faint);
+    margin:0 0 28px;
+  }
+  .hero p.bio{
+    font-size:17px; color:var(--ink-soft); max-width:58ch; margin:0;
+  }
+  .hero p.bio .mark{
+    background:linear-gradient(transparent 70%, rgba(166,116,44,0.22) 70%);
+  }
+  .hero-links{margin-top:30px; display:flex; gap:18px; flex-wrap:wrap;}
+  .hero-links a{
+    font-family:'IBM Plex Mono', monospace; font-size:13px;
+    padding:8px 16px; border:1px solid var(--ink); border-radius:999px;
+    transition:background 0.2s, color 0.2s;
+  }
+  .hero-links a:hover{background:var(--ink); color:var(--paper);}
+  .hero-links a.primary{background:var(--brass); border-color:var(--brass); color:#fff;}
+  .hero-links a.primary:hover{background:#8f6323;}
+
+  /* ---- Section shell ---- */
+  section{padding:56px 0; border-top:1px solid var(--line-soft);}
+  .sec-head{display:flex; align-items:baseline; gap:14px; margin-bottom:32px;}
+  .sec-num{font-family:'IBM Plex Mono', monospace; font-size:13px; color:var(--brass);}
+  .sec-title{font-family:'Newsreader', serif; font-weight:500; font-size:26px; margin:0;}
+
+  /* ---- Skills ---- */
+  .skill-group{margin-bottom:22px;}
+  .skill-group:last-child{margin-bottom:0;}
+  .skill-label{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--ink-faint);
+    text-transform:uppercase; letter-spacing:0.08em; margin:0 0 10px;
+  }
+  .chips{display:flex; flex-wrap:wrap; gap:8px;}
+  .chip{
+    font-family:'IBM Plex Mono', monospace; font-size:12.5px;
+    padding:5px 11px; border:1px solid var(--line); border-radius:6px;
+    background:var(--paper-raised); color:var(--ink);
+  }
+
+  /* ---- Timeline (experience) ---- */
+  .tl-item{
+    position:relative; padding-left:26px; padding-bottom:36px;
+    border-left:1px solid var(--line);
+  }
+  .tl-item:last-child{padding-bottom:0;}
+  .tl-item::before{
+    content:''; position:absolute; left:-5px; top:4px;
+    width:9px; height:9px; border-radius:50%;
+    background:var(--paper); border:2px solid var(--brass);
+  }
+  .tl-date{font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--ink-faint); margin-bottom:4px;}
+  .tl-role{font-family:'Newsreader', serif; font-size:19px; font-weight:600; margin:0 0 2px;}
+  .tl-org{font-size:14.5px; color:var(--ink-soft); margin:0 0 12px;}
+  .tl-item ul{margin:0; padding-left:18px; color:var(--ink-soft); font-size:14.5px;}
+  .tl-item li{margin-bottom:6px;}
+  .tl-item li:last-child{margin-bottom:0;}
+
+  /* ---- Projects ---- */
+  .proj-grid{display:flex; flex-direction:column; gap:20px;}
+  .proj-card{
+    background:var(--paper-raised); border:1px solid var(--line);
+    border-radius:10px; padding:26px 26px 24px;
+  }
+  .proj-top{display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:10px; flex-wrap:wrap;}
+  .proj-title{font-family:'Newsreader', serif; font-weight:600; font-size:20px; margin:0;}
+  .proj-tag{
+    font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--brass);
+    border:1px solid var(--brass); border-radius:999px; padding:3px 10px; white-space:nowrap;
+  }
+  .proj-date{font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--ink-faint); margin:0 0 12px;}
+  .proj-card p.desc{color:var(--ink-soft); font-size:14.5px; margin:0 0 14px;}
+  .proj-card ul{margin:0 0 14px; padding-left:18px; color:var(--ink-soft); font-size:14.5px;}
+  .proj-card li{margin-bottom:6px;}
+  .proj-links{display:flex; gap:14px; flex-wrap:wrap;}
+  .proj-links a{
+    font-family:'IBM Plex Mono', monospace; font-size:12.5px; color:var(--brass);
+    border-bottom:1px solid var(--brass-soft);
+  }
+  .proj-links a:hover{color:#8f6323; border-color:#8f6323;}
+
+  /* ---- Research notes ---- */
+  .paper{margin-bottom:18px; padding-left:0;}
+  .paper:last-child{margin-bottom:0;}
+  .paper-title{font-family:'Newsreader', serif; font-style:italic; font-size:16.5px; margin:0 0 4px;}
+  .paper-desc{font-size:14px; color:var(--ink-soft); margin:0;}
+
+  /* ---- Education ---- */
+  .edu-item{margin-bottom:18px;}
+  .edu-item:last-child{margin-bottom:0;}
+  .edu-school{font-family:'Newsreader', serif; font-weight:600; font-size:17px; margin:0 0 2px;}
+  .edu-detail{font-size:14px; color:var(--ink-soft); margin:0;}
+  .edu-date{font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--ink-faint); margin:0 0 2px;}
+
+  /* ---- Contact / footer ---- */
+  .contact-grid{display:flex; flex-wrap:wrap; gap:14px;}
+  .contact-card{
+    flex:1 1 220px; background:var(--paper-raised); border:1px solid var(--line);
+    border-radius:10px; padding:18px 20px; display:flex; flex-direction:column; gap:4px;
+  }
+  .contact-label{font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--ink-faint); text-transform:uppercase; letter-spacing:0.08em;}
+  .contact-value{font-size:15px; font-weight:500;}
+  .contact-value a{border-bottom:1px solid var(--brass-soft);}
+  footer{
+    padding:32px 0 48px; text-align:center;
+    font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--ink-faint);
+  }
+
+  @media (max-width:600px){
+    .hero{padding:56px 0 36px;}
+    .hero h1{font-size:34px;}
+    .sec-title{font-size:22px;}
+    section{padding:44px 0;}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <span class="topbar-name">蕭姵萱</span>
+    <div class="lang-switch" role="group" aria-label="Language switch">
+      <button id="btn-zh" class="active" onclick="setLang('zh')">中</button>
+      <button id="btn-en" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <!-- HERO -->
+  <section class="hero" style="border-top:none;">
+    <p class="hero-eyebrow" data-i18n="hero.eyebrow"></p>
+    <h1 data-i18n-html="hero.title"></h1>
+    <p class="en-name">Pei-Hsuan Hsiao</p>
+    <p class="bio" data-i18n-html="hero.bio"></p>
+    <div class="hero-links">
+      <a class="primary" href="mailto:hsiaopeihsuan0627@gmail.com" data-i18n="hero.linkEmail"></a>
+      <a href="https://www.linkedin.com/in/pei-hsuan-hsiao-2a87b52b7/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="#projects" data-i18n="hero.linkProjects"></a>
+    </div>
+  </section>
+
+  <!-- ABOUT / SKILLS -->
+  <section id="about">
+    <div class="sec-head">
+      <span class="sec-num">§01</span>
+      <h2 class="sec-title" data-i18n="about.title"></h2>
+    </div>
+
+    <div class="skill-group">
+      <p class="skill-label" data-i18n="about.langLabel"></p>
+      <div class="chips" id="chips-lang"></div>
+    </div>
+    <div class="skill-group">
+      <p class="skill-label" data-i18n="about.progLabel"></p>
+      <div class="chips">
+        <span class="chip">Java</span><span class="chip">Python</span><span class="chip">SQL</span>
+        <span class="chip">Matlab</span><span class="chip">Google Apps Script</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <p class="skill-label" data-i18n="about.aiLabel"></p>
+      <div class="chips">
+        <span class="chip">RAG</span><span class="chip">LLM Prompt Engineering</span>
+        <span class="chip">Model Fine-tuning</span><span class="chip">推薦系統 Recommender Systems</span>
+        <span class="chip">NLP</span><span class="chip">知識圖譜 Knowledge Graph</span>
+        <span class="chip">Machine Learning</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <p class="skill-label" data-i18n="about.dataLabel"></p>
+      <div class="chips">
+        <span class="chip">Ubuntu / Linux</span><span class="chip">Docker</span><span class="chip">Hadoop</span>
+        <span class="chip">Neo4j</span><span class="chip">BeautifulSoup</span><span class="chip">Selenium</span>
+        <span class="chip">Git / GitHub</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <p class="skill-label" data-i18n="about.otherLabel"></p>
+      <div class="chips">
+        <span class="chip">Six Sigma Green Belt</span><span class="chip">Pandas</span><span class="chip">NumPy</span>
+        <span class="chip">Figma (UX/UI)</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section id="education">
+    <div class="sec-head">
+      <span class="sec-num">§02</span>
+      <h2 class="sec-title" data-i18n="edu.title"></h2>
+    </div>
+    <div class="edu-item">
+      <p class="edu-date">2023.09 — 2027.06</p>
+      <p class="edu-school" data-i18n="edu.soochow.school"></p>
+      <p class="edu-detail" data-i18n="edu.soochow.detail"></p>
+    </div>
+    <div class="edu-item">
+      <p class="edu-date">2025.07 — 2025.08</p>
+      <p class="edu-school" data-i18n="edu.hk.school"></p>
+      <p class="edu-detail" data-i18n="edu.hk.detail"></p>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="sec-head">
+      <span class="sec-num">§03</span>
+      <h2 class="sec-title" data-i18n="exp.title"></h2>
+    </div>
+
+    <div class="tl-item">
+      <p class="tl-date">2025.07 — 2025.08</p>
+      <p class="tl-role" data-i18n="exp.moc.role"></p>
+      <p class="tl-org" data-i18n="exp.moc.org"></p>
+      <ul>
+        <li data-i18n="exp.moc.p1"></li>
+        <li data-i18n="exp.moc.p2"></li>
+      </ul>
+    </div>
+
+    <div class="tl-item">
+      <p class="tl-date">2024.05 — 2024.11</p>
+      <p class="tl-role" data-i18n="exp.cee.role"></p>
+      <p class="tl-org" data-i18n="exp.cee.org"></p>
+      <ul>
+        <li data-i18n="exp.cee.p1"></li>
+        <li data-i18n="exp.cee.p2"></li>
+        <li data-i18n="exp.cee.p3"></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="sec-head">
+      <span class="sec-num">§04</span>
+      <h2 class="sec-title" data-i18n="proj.title"></h2>
+    </div>
+
+    <div class="proj-grid">
+
+      <!-- Insurance LLM -->
+      <div class="proj-card">
+        <div class="proj-top">
+          <h3 class="proj-title" data-i18n="proj.insurance.title"></h3>
+          <span class="proj-tag" data-i18n="proj.insurance.tag"></span>
+        </div>
+        <p class="proj-date" data-i18n="proj.insurance.date"></p>
+        <p class="desc" data-i18n="proj.insurance.desc"></p>
+        <ul>
+          <li data-i18n="proj.insurance.p1"></li>
+          <li data-i18n="proj.insurance.p2"></li>
+          <li data-i18n="proj.insurance.p3"></li>
+        </ul>
+        <div class="proj-links">
+          <a href="https://claim-intake-624489584685.asia-east1.run.app/" target="_blank" rel="noopener" data-i18n="proj.insurance.link"></a>
+        </div>
+      </div>
+
+      <!-- Recommender system -->
+      <div class="proj-card">
+        <div class="proj-top">
+          <h3 class="proj-title" data-i18n="proj.recsys.title"></h3>
+          <span class="proj-tag" data-i18n="proj.recsys.tag"></span>
+        </div>
+        <p class="proj-date" data-i18n="proj.recsys.date"></p>
+        <p class="desc" data-i18n="proj.recsys.desc"></p>
+        <ul>
+          <li data-i18n="proj.recsys.p1"></li>
+          <li data-i18n="proj.recsys.p2"></li>
+        </ul>
+      </div>
+
+      <!-- Club management system -->
+      <div class="proj-card">
+        <div class="proj-top">
+          <h3 class="proj-title" data-i18n="proj.club.title"></h3>
+          <span class="proj-tag" data-i18n="proj.club.tag"></span>
+        </div>
+        <p class="proj-date" data-i18n="proj.club.date"></p>
+        <p class="desc" data-i18n="proj.club.desc"></p>
+        <ul>
+          <li data-i18n="proj.club.p1"></li>
+          <li data-i18n="proj.club.p2"></li>
+          <li data-i18n="proj.club.p3"></li>
+        </ul>
+      </div>
+
+      <!-- Hackathon -->
+      <div class="proj-card">
+        <div class="proj-top">
+          <h3 class="proj-title" data-i18n="proj.mrt.title"></h3>
+          <span class="proj-tag" data-i18n="proj.mrt.tag"></span>
+        </div>
+        <p class="proj-date" data-i18n="proj.mrt.date"></p>
+        <p class="desc" data-i18n="proj.mrt.desc"></p>
+        <ul>
+          <li data-i18n="proj.mrt.p1"></li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- RESEARCH -->
+  <section id="research">
+    <div class="sec-head">
+      <span class="sec-num">§05</span>
+      <h2 class="sec-title" data-i18n="research.title"></h2>
+    </div>
+    <div class="paper">
+      <p class="paper-title" data-i18n="research.p1.title"></p>
+      <p class="paper-desc" data-i18n="research.p1.desc"></p>
+    </div>
+    <div class="paper">
+      <p class="paper-title" data-i18n="research.p2.title"></p>
+      <p class="paper-desc" data-i18n="research.p2.desc"></p>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="sec-head">
+      <span class="sec-num">§06</span>
+      <h2 class="sec-title" data-i18n="contact.title"></h2>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-card">
+        <span class="contact-label">Email</span>
+        <span class="contact-value"><a href="mailto:hsiaopeihsuan0627@gmail.com">hsiaopeihsuan0627@gmail.com</a></span>
+      </div>
+      <div class="contact-card">
+        <span class="contact-label">LinkedIn</span>
+        <span class="contact-value"><a href="https://www.linkedin.com/in/pei-hsuan-hsiao-2a87b52b7/" target="_blank" rel="noopener">pei-hsuan-hsiao</a></span>
+      </div>
+      <div class="contact-card">
+        <span class="contact-label" data-i18n="contact.locLabel"></span>
+        <span class="contact-value" data-i18n="contact.locValue"></span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <span data-i18n="footer.text"></span>
+</footer>
+
+<script>
+const i18n = {
+  zh: {
+    "hero.eyebrow": "人工智慧 ｜ 邏輯 ｜ 系統開發",
+    "hero.title": "蕭姵萱<br><em>用哲學的邏輯，寫 AI 的系統。</em>",
+    "hero.bio": "東吳大學資訊管理與哲學雙主修、輔修工業工程。擅長將<span class=\"mark\">哲學的嚴謹邏輯分析</span>應用於 AI 系統開發，在交通部運輸研究所實習期間，成功導入 RAG 技術優化行政自動化流程。目前正領導推薦系統畢業專題研究，並與財務工程學系跨系合作開發 LLM 保險核算系統。",
+    "hero.linkEmail": "寄信給我",
+    "hero.linkProjects": "查看專案 ↓",
+    "about.title": "自我介紹與技能",
+    "about.langLabel": "語言能力",
+    "about.progLabel": "程式語言",
+    "about.aiLabel": "AI 與數據科學",
+    "about.dataLabel": "數據工程與維運",
+    "about.otherLabel": "分析與設計",
+    "edu.title": "學歷",
+    "edu.soochow.school": "私立東吳大學",
+    "edu.soochow.detail": "資訊管理學系｜雙主修哲學系｜輔修工業工程",
+    "edu.hk.school": "香港教育大學",
+    "edu.hk.detail": "暑期交換計畫｜修習人工智慧相關課程，參與跨文化團隊合作與學術討論",
+    "exp.title": "工作與研究經歷",
+    "exp.moc.role": "暑期實習生",
+    "exp.moc.org": "交通部運輸研究所・運輸資訊組",
+    "exp.moc.p1": "導入 RAG 技術優化內部資訊檢索系統，開發 LLM 應用實現自動化撰寫總結報告與公文生成",
+    "exp.moc.p2": "以 BeautifulSoup、Selenium 開發自動化爬蟲，蒐集並清洗大規模交通研究資料集，為後續機器學習模型提供高品質數據基礎",
+    "exp.cee.role": "專案助理研究員",
+    "exp.cee.org": "東吳大學中東歐研究中心",
+    "exp.cee.p1": "核心參與「匈牙利文化週」籌備與執行，負責跨單位協調與國外嘉賓接待，並全英文主持文化週開場",
+    "exp.cee.p2": "受邀至台北醫學大學進行「匈牙利電影與媒體」專題演講",
+    "exp.cee.p3": "獨立經營研究中心社群媒體平台，並以 Figma 製作視覺文宣，提升研究中心對外曝光",
+    "proj.title": "專案作品",
+    "proj.insurance.title": "LLM 保險自動化核算系統",
+    "proj.insurance.tag": "產學合作・進行中",
+    "proj.insurance.date": "2026.03 — 至今｜核心研發成員，跨系協作財務工程學系",
+    "proj.insurance.desc": "與財務工程學系跨系合作，將 LLM 技術導入保險核保流程，針對道路救援險與第三人責任險打造多代理人（multi-agent）自動化輔助審核系統，強調每個決策都有可追溯依據。",
+    "proj.insurance.p1": "以 Neo4j 建立知識圖譜，儲存案件與規則、過往案例間的關聯，取代單純的關鍵字或向量相似度查詢",
+    "proj.insurance.p2": "設計 Judge Agent 負責公平性複核，例如檢查理賠金額是否落在合理範圍",
+    "proj.insurance.p3": "系統已於 GCP Cloud Run 部署案件受理、複核代理人、知識圖譜查詢等服務",
+    "proj.insurance.link": "查看測試系統 →",
+    "proj.recsys.title": "推薦系統演算法研究與復現",
+    "proj.recsys.tag": "畢業專題・研究組長",
+    "proj.recsys.date": "2026.02 — 至今",
+    "proj.recsys.desc": "帶領團隊研讀推薦系統領域論文，復現演算法成果並分析模型架構對使用者行為預測的影響。",
+    "proj.recsys.p1": "運用 Python 及數據科學框架處理大規模多模態數據",
+    "proj.recsys.p2": "統籌研究進度，確保演算法實作的嚴謹性與可驗證性",
+    "proj.club.title": "社團管理系統開發計畫",
+    "proj.club.tag": "系統分析・個人分工 75%",
+    "proj.club.date": "學期專題｜負責需求塑模、ERD、資料字典與 UI/UX 原型",
+    "proj.club.desc": "針對社團資訊分散、幹部難以追蹤報名與經費的問題，完整走過一輪系統開發生命週期，設計會員、活動、財務、資產四大主軸的資料架構。",
+    "proj.club.p1": "撰寫系統需求與功能塑模全文，並繪製 Context Diagram 界定系統範圍",
+    "proj.club.p2": "獨立完成 ERD（11 張資料表）與資料字典全文",
+    "proj.club.p3": "以 Figma 完成介面雛形與動線設計，確保實作對齊使用者需求",
+    "proj.mrt.title": "台北捷運 GO — 智慧轉乘系統",
+    "proj.mrt.tag": "第四屆台北捷運黑客松・決賽入選",
+    "proj.mrt.date": "2024.04 — 2024.05｜隊長兼 UX 規劃",
+    "proj.mrt.desc": "帶領跨職能團隊從 0 到 1 設計「台北捷運 GO」，運用設計思考優化國際旅客的轉乘路徑，並以數據分析驗證方案可行性，於 90 組參賽隊伍中脫穎而出進入決賽。",
+    "proj.mrt.p1": "統籌 UX 規劃、功能設計與團隊分工，將構想產出為可展示的 MVP",
+    "research.title": "研究興趣",
+    "research.p1.title": "An Innovative Framework for AI Agent Behavior Based on Promise Theory",
+    "research.p1.desc": "IEEE ICBDA（撰寫中）。設計整合 LLM 決策與承諾理論的多代理模擬框架，以物流案例研究比較代理系統與傳統規則模型在任務成功率與衝突減少上的差異。",
+    "research.p2.title": "On Object and Concept — The Problem of Frege's Concept Horse",
+    "research.p2.desc": "探討弗雷格對象與概念的區分及「概念馬」悖論，分析自然語言如何在不削弱邏輯結構的前提下，將概念視為對象處理。",
+    "contact.title": "聯絡方式",
+    "contact.locLabel": "所在地區",
+    "contact.locValue": "台灣・台北 / 新北",
+    "footer.text": "蕭姵萱 Pei-Hsuan Hsiao ｜ 本頁面以誠實紀錄經歷為原則製作"
+  },
+  en: {
+    "hero.eyebrow": "Artificial Intelligence · Logic · Systems",
+    "hero.title": "Pei-Hsuan Hsiao<br><em>Writing AI systems with a philosopher's logic.</em>",
+    "hero.bio": "Double major in Information Management &amp; Philosophy, minoring in Industrial Engineering at Soochow University. I apply <span class=\"mark\">rigorous philosophical logic</span> to AI system design — during my internship at the Institute of Transportation (MOTC), I implemented RAG to streamline document generation and retrieval. I currently lead a recommendation-systems research project and collaborate with the Department of Financial Engineering on an LLM-based insurance underwriting system.",
+    "hero.linkEmail": "Email me",
+    "hero.linkProjects": "See projects ↓",
+    "about.title": "About &amp; Skills",
+    "about.langLabel": "Languages",
+    "about.progLabel": "Programming",
+    "about.aiLabel": "AI &amp; Data Science",
+    "about.dataLabel": "Data Engineering &amp; Ops",
+    "about.otherLabel": "Analysis &amp; Design",
+    "edu.title": "Education",
+    "edu.soochow.school": "Soochow University",
+    "edu.soochow.detail": "B.S. Information Management · Double major in Philosophy · Minor in Industrial Engineering",
+    "edu.hk.school": "The Education University of Hong Kong",
+    "edu.hk.detail": "Summer Exchange Program · AI-related coursework and cross-cultural collaboration",
+    "exp.title": "Experience",
+    "exp.moc.role": "Summer Intern",
+    "exp.moc.org": "Institute of Transportation, Ministry of Transportation and Communications",
+    "exp.moc.p1": "Implemented RAG to optimize internal information retrieval, and built LLM features for automated report and document generation",
+    "exp.moc.p2": "Built automated web crawlers with BeautifulSoup and Selenium to collect and clean large-scale transportation datasets for downstream ML models",
+    "exp.cee.role": "Project Assistant Research Fellow",
+    "exp.cee.org": "Center for Central and Eastern Europe Studies, Soochow University",
+    "exp.cee.p1": "Co-organized Hungarian Culture Week, coordinating across units and hosting international guests, and delivered the opening remarks entirely in English",
+    "exp.cee.p2": "Invited to give a guest lecture on Hungarian film and media at Taipei Medical University",
+    "exp.cee.p3": "Independently ran the center's social media presence and produced visual materials in Figma to boost outreach",
+    "proj.title": "Projects",
+    "proj.insurance.title": "LLM-Based Insurance Underwriting System",
+    "proj.insurance.tag": "Industry Collaboration · Ongoing",
+    "proj.insurance.date": "Mar 2026 — Present · Core R&amp;D member, cross-department with Financial Engineering",
+    "proj.insurance.desc": "Collaborating across departments to bring LLM technology into insurance underwriting — a multi-agent system for road-assistance and third-party liability claims, designed so every decision is traceable rather than a black box.",
+    "proj.insurance.p1": "Built a Neo4j knowledge graph linking claims, rules, and past cases — going beyond keyword or vector-similarity search",
+    "proj.insurance.p2": "Designed a Judge Agent for fairness review, e.g. checking whether payout amounts fall within a reasonable range",
+    "proj.insurance.p3": "Deployed claim intake, judge agent, and knowledge-graph query services on GCP Cloud Run",
+    "proj.insurance.link": "View live test system →",
+    "proj.recsys.title": "Recommendation Systems Research",
+    "proj.recsys.tag": "Capstone Project · Research Lead",
+    "proj.recsys.date": "Feb 2026 — Present",
+    "proj.recsys.desc": "Leading a team through recommendation-systems literature, reproducing published algorithms and analyzing how model architecture affects user-behavior prediction.",
+    "proj.recsys.p1": "Processing large-scale multimodal data with Python and standard data-science frameworks",
+    "proj.recsys.p2": "Coordinating research progress to ensure implementations are rigorous and verifiable",
+    "proj.club.title": "Club Management System",
+    "proj.club.tag": "Systems Analysis · 75% individual contribution",
+    "proj.club.date": "Course project · Owned requirements modeling, ERD, data dictionary, and UI/UX prototype",
+    "proj.club.desc": "Addressed scattered club information and untraceable event sign-ups by running a full systems-development lifecycle, modeling data around members, events, finance, and assets.",
+    "proj.club.p1": "Authored the full requirements &amp; functional modeling document and drew the Context Diagram to define system scope",
+    "proj.club.p2": "Independently built the ERD (11 entity tables) and complete data dictionary",
+    "proj.club.p3": "Prototyped the interface and user flow in Figma to keep implementation aligned with user needs",
+    "proj.mrt.title": "Taipei MRT GO — Smart Transfer System",
+    "proj.mrt.tag": "4th Taipei MRT Hackathon · Finalist",
+    "proj.mrt.date": "Apr — May 2024 · Team Lead &amp; UX Planner",
+    "proj.mrt.desc": "Led a cross-functional team building \"Taipei MRT GO\" from 0 to 1, applying design thinking to optimize transfer routes for international travelers and validating feasibility with data — advancing to the finals among 90 teams.",
+    "proj.mrt.p1": "Owned UX planning, feature design, and team coordination to ship a demoable MVP",
+    "research.title": "Research Interests",
+    "research.p1.title": "An Innovative Framework for AI Agent Behavior Based on Promise Theory",
+    "research.p1.desc": "IEEE ICBDA (in preparation). A multi-agent simulation framework integrating LLM-based decision-making with Promise Theory, evaluated on logistics case studies against rule-based baselines.",
+    "research.p2.title": "On Object and Concept — The Problem of Frege's Concept Horse",
+    "research.p2.desc": "Examines Frege's distinction between objects and concepts and the \"concept horse\" paradox, exploring how natural language treats concepts as objects without undermining logical structure.",
+    "contact.title": "Contact",
+    "contact.locLabel": "Location",
+    "contact.locValue": "Taipei / New Taipei, Taiwan",
+    "footer.text": "Pei-Hsuan Hsiao · Built to honestly document real work"
+  }
+};
+
+const langChips = {
+  zh: ["英文（流利）","中文（母語）","台語（流利）","粵語（中等）"],
+  en: ["English (Fluent)","Mandarin (Native)","Taiwanese (Fluent)","Cantonese (Intermediate)"]
+};
+
+function applyLang(lang){
+  document.documentElement.setAttribute('data-lang', lang);
+  document.documentElement.lang = lang === 'zh' ? 'zh-Hant' : 'en';
+  const dict = i18n[lang];
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    if(dict[key] !== undefined) el.textContent = dict[key];
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(el=>{
+    const key = el.getAttribute('data-i18n-html');
+    if(dict[key] !== undefined) el.innerHTML = dict[key];
+  });
+  const chipWrap = document.getElementById('chips-lang');
+  chipWrap.innerHTML = langChips[lang].map(c=>`<span class="chip">${c}</span>`).join('');
+  document.getElementById('btn-zh').classList.toggle('active', lang==='zh');
+  document.getElementById('btn-en').classList.toggle('active', lang==='en');
+  document.title = lang === 'zh' ? '蕭姵萱 Pei-Hsuan Hsiao — AI × 邏輯' : 'Pei-Hsuan Hsiao — AI × Logic';
+}
+
+function setLang(lang){
+  applyLang(lang);
+  try{ localStorage.setItem('site-lang', lang); }catch(e){}
+}
+
+(function init(){
+  let saved = 'zh';
+  try{ saved = localStorage.getItem('site-lang') || 'zh'; }catch(e){}
+  applyLang(saved);
+})();
+</script>
+
+</body>
+</html>
