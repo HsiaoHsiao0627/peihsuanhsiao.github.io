@@ -7,7 +7,7 @@
 <meta name="description" content="蕭姵萱｜資訊管理與哲學雙主修，專注 RAG、推薦系統與 LLM 應用開發">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Noto+Serif+TC:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
     --paper:#F8F7F3;
@@ -27,9 +27,9 @@
     margin:0;
     background:var(--paper);
     color:var(--ink);
-    font-family:'Inter',sans-serif;
+    font-family:'Noto Serif TC','Newsreader',serif;
     font-size:16px;
-    line-height:1.7;
+    line-height:1.8;
     -webkit-font-smoothing:antialiased;
   }
   @media (prefers-reduced-motion: reduce){
@@ -39,9 +39,9 @@
   ::selection{background:var(--brass-soft); color:#fff;}
   a{color:var(--ink); text-decoration:none;}
   a:focus-visible, button:focus-visible{outline:2px solid var(--brass); outline-offset:3px;}
-
+ 
   .wrap{max-width:var(--maxw); margin:0 auto; padding:0 28px;}
-
+ 
   /* ---- Nav / lang switch ---- */
   .topbar{
     position:sticky; top:0; z-index:50;
@@ -68,9 +68,19 @@
     transition:background 0.2s, color 0.2s;
   }
   .lang-switch button.active{background:var(--ink); color:var(--paper);}
-
+ 
   /* ---- Hero ---- */
   .hero{padding:76px 0 48px;}
+  .hero-eyebrow, .hero h1, .hero .en-name, .hero p.bio, .hero-links{
+    opacity:0; transform:translateY(14px);
+    animation:hero-in 0.7s ease forwards;
+  }
+  .hero-eyebrow{animation-delay:0.05s;}
+  .hero h1{animation-delay:0.14s;}
+  .hero .en-name{animation-delay:0.2s;}
+  .hero p.bio{animation-delay:0.28s;}
+  .hero-links{animation-delay:0.38s;}
+  @keyframes hero-in{ to{opacity:1; transform:translateY(0);} }
   .hero-eyebrow{
     font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:0.12em;
     color:var(--brass); text-transform:uppercase; margin:0 0 18px;
@@ -84,6 +94,7 @@
     font-family:'IBM Plex Mono', monospace; font-size:14px; color:var(--ink-faint);
     margin:0 0 28px;
   }
+  [data-lang="en"] .hero .en-name{display:none;}
   .hero p.bio{
     font-size:17px; color:var(--ink-soft); max-width:58ch; margin:0;
   }
@@ -99,13 +110,13 @@
   .hero-links a:hover{background:var(--ink); color:var(--paper);}
   .hero-links a.primary{background:var(--brass); border-color:var(--brass); color:#fff;}
   .hero-links a.primary:hover{background:#8f6323;}
-
+ 
   /* ---- Section shell ---- */
   section{padding:56px 0; border-top:1px solid var(--line-soft);}
   .sec-head{display:flex; align-items:baseline; gap:14px; margin-bottom:32px;}
   .sec-num{font-family:'IBM Plex Mono', monospace; font-size:13px; color:var(--brass);}
   .sec-title{font-family:'Newsreader', serif; font-weight:500; font-size:26px; margin:0;}
-
+ 
   /* ---- Skills ---- */
   .skill-group{margin-bottom:22px;}
   .skill-group:last-child{margin-bottom:0;}
@@ -119,7 +130,7 @@
     padding:5px 11px; border:1px solid var(--line); border-radius:6px;
     background:var(--paper-raised); color:var(--ink);
   }
-
+ 
   /* ---- Timeline (experience) ---- */
   .tl-item{
     position:relative; padding-left:26px; padding-bottom:36px;
@@ -137,7 +148,7 @@
   .tl-item ul{margin:0; padding-left:18px; color:var(--ink-soft); font-size:14.5px;}
   .tl-item li{margin-bottom:6px;}
   .tl-item li:last-child{margin-bottom:0;}
-
+ 
   /* ---- Projects ---- */
   .proj-grid{display:flex; flex-direction:column; gap:20px;}
   .proj-card{
@@ -160,20 +171,20 @@
     border-bottom:1px solid var(--brass-soft);
   }
   .proj-links a:hover{color:#8f6323; border-color:#8f6323;}
-
+ 
   /* ---- Research notes ---- */
   .paper{margin-bottom:18px; padding-left:0;}
   .paper:last-child{margin-bottom:0;}
   .paper-title{font-family:'Newsreader', serif; font-style:italic; font-size:16.5px; margin:0 0 4px;}
   .paper-desc{font-size:14px; color:var(--ink-soft); margin:0;}
-
+ 
   /* ---- Education ---- */
   .edu-item{margin-bottom:18px;}
   .edu-item:last-child{margin-bottom:0;}
   .edu-school{font-family:'Newsreader', serif; font-weight:600; font-size:17px; margin:0 0 2px;}
   .edu-detail{font-size:14px; color:var(--ink-soft); margin:0;}
   .edu-date{font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--ink-faint); margin:0 0 2px;}
-
+ 
   /* ---- Contact / footer ---- */
   .contact-grid{display:flex; flex-wrap:wrap; gap:14px;}
   .contact-card{
@@ -187,7 +198,67 @@
     padding:32px 0 48px; text-align:center;
     font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--ink-faint);
   }
-
+ 
+  /* ---- Scroll reveal ---- */
+  .reveal{
+    opacity:0; transform:translateY(22px);
+    transition:opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.is-visible{opacity:1; transform:translateY(0);}
+  .reveal-stagger.is-visible > *{opacity:1; transform:translateY(0);}
+  .reveal-stagger > *{
+    opacity:0; transform:translateY(16px);
+    transition:opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal-stagger.is-visible > *:nth-child(1){transition-delay:0.02s;}
+  .reveal-stagger.is-visible > *:nth-child(2){transition-delay:0.10s;}
+  .reveal-stagger.is-visible > *:nth-child(3){transition-delay:0.18s;}
+  .reveal-stagger.is-visible > *:nth-child(4){transition-delay:0.26s;}
+ 
+  /* ---- Interactive polish ---- */
+  section{transition:border-color 0.3s ease;}
+  .sec-num{display:inline-block; transition:transform 0.3s ease, color 0.3s ease;}
+  .sec-head:hover .sec-num{transform:translateX(-2px); color:var(--ink);}
+ 
+  .hero-links a{position:relative; overflow:hidden;}
+  .hero-links a:not(.primary)::before{
+    content:''; position:absolute; inset:0;
+    background:var(--ink); transform:translateY(101%);
+    transition:transform 0.28s cubic-bezier(.65,0,.35,1); z-index:0;
+  }
+  .hero-links a:not(.primary):hover::before{transform:translateY(0);}
+  .hero-links a span{position:relative; z-index:1;}
+ 
+  .chip{transition:background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;}
+  .chip:hover{background:var(--ink); border-color:var(--ink); color:var(--paper); transform:translateY(-2px);}
+ 
+  .tl-item::before{transition:background 0.3s ease, border-color 0.3s ease;}
+  .tl-item:hover::before{background:var(--brass); border-color:var(--brass);}
+ 
+  .proj-card{transition:transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;}
+  .proj-card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 14px 32px -18px rgba(30,42,56,0.28);
+    border-color:var(--brass-soft);
+  }
+ 
+  .contact-card{transition:transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;}
+  .contact-card:hover{transform:translateY(-3px); box-shadow:0 10px 24px -16px rgba(30,42,56,0.25); border-color:var(--brass-soft);}
+ 
+  .lang-switch button{position:relative;}
+  .lang-switch button::after{
+    content:''; position:absolute; left:14px; right:14px; bottom:2px; height:1px;
+    background:var(--brass); transform:scaleX(0); transition:transform 0.25s ease;
+  }
+  .lang-switch button:not(.active):hover::after{transform:scaleX(1);}
+ 
+  .proj-links a{position:relative; padding-bottom:1px;}
+  .proj-links a::after{
+    content:''; position:absolute; left:0; bottom:-1px; width:100%; height:1px;
+    background:var(--brass); transform:scaleX(1); transform-origin:right;
+    transition:transform 0.25s ease;
+  }
+ 
   @media (max-width:600px){
     .hero{padding:56px 0 36px;}
     .hero h1{font-size:34px;}
@@ -197,7 +268,7 @@
 </style>
 </head>
 <body>
-
+ 
 <div class="topbar">
   <div class="topbar-inner">
     <span class="topbar-name">蕭姵萱</span>
@@ -207,9 +278,9 @@
     </div>
   </div>
 </div>
-
+ 
 <main class="wrap">
-
+ 
   <!-- HERO -->
   <section class="hero" style="border-top:none;">
     <p class="hero-eyebrow" data-i18n="hero.eyebrow"></p>
@@ -217,19 +288,19 @@
     <p class="en-name">Pei-Hsuan Hsiao</p>
     <p class="bio" data-i18n-html="hero.bio"></p>
     <div class="hero-links">
-      <a class="primary" href="mailto:hsiaopeihsuan0627@gmail.com" data-i18n="hero.linkEmail"></a>
-      <a href="https://www.linkedin.com/in/pei-hsuan-hsiao-2a87b52b7/" target="_blank" rel="noopener">LinkedIn</a>
-      <a href="#projects" data-i18n="hero.linkProjects"></a>
+      <a class="primary" href="mailto:hsiaopeihsuan0627@gmail.com"><span data-i18n="hero.linkEmail"></span></a>
+      <a href="https://www.linkedin.com/in/pei-hsuan-hsiao-2a87b52b7/" target="_blank" rel="noopener"><span>LinkedIn</span></a>
+      <a href="#projects"><span data-i18n="hero.linkProjects"></span></a>
     </div>
   </section>
-
+ 
   <!-- ABOUT / SKILLS -->
-  <section id="about">
+  <section id="about" class="reveal">
     <div class="sec-head">
-      <span class="sec-num">§01</span>
+      <span class="sec-num">01</span>
       <h2 class="sec-title" data-i18n="about.title"></h2>
     </div>
-
+ 
     <div class="skill-group">
       <p class="skill-label" data-i18n="about.langLabel"></p>
       <div class="chips" id="chips-lang"></div>
@@ -238,15 +309,15 @@
       <p class="skill-label" data-i18n="about.progLabel"></p>
       <div class="chips">
         <span class="chip">Java</span><span class="chip">Python</span><span class="chip">SQL</span>
-        <span class="chip">Matlab</span><span class="chip">Google Apps Script</span>
+        <span class="chip">Matlab</span>
       </div>
     </div>
     <div class="skill-group">
       <p class="skill-label" data-i18n="about.aiLabel"></p>
       <div class="chips">
         <span class="chip">RAG</span><span class="chip">LLM Prompt Engineering</span>
-        <span class="chip">Model Fine-tuning</span><span class="chip">推薦系統 Recommender Systems</span>
-        <span class="chip">NLP</span><span class="chip">知識圖譜 Knowledge Graph</span>
+        <span class="chip">Model Fine-tuning</span><span class="chip">Recommender Systems</span>
+        <span class="chip">NLP</span><span class="chip">Knowledge Graph</span>
         <span class="chip">Machine Learning</span>
       </div>
     </div>
@@ -266,11 +337,11 @@
       </div>
     </div>
   </section>
-
+ 
   <!-- EDUCATION -->
-  <section id="education">
+  <section id="education" class="reveal">
     <div class="sec-head">
-      <span class="sec-num">§02</span>
+      <span class="sec-num">02</span>
       <h2 class="sec-title" data-i18n="edu.title"></h2>
     </div>
     <div class="edu-item">
@@ -284,14 +355,14 @@
       <p class="edu-detail" data-i18n="edu.hk.detail"></p>
     </div>
   </section>
-
+ 
   <!-- EXPERIENCE -->
-  <section id="experience">
+  <section id="experience" class="reveal">
     <div class="sec-head">
-      <span class="sec-num">§03</span>
+      <span class="sec-num">03</span>
       <h2 class="sec-title" data-i18n="exp.title"></h2>
     </div>
-
+ 
     <div class="tl-item">
       <p class="tl-date">2025.07 — 2025.08</p>
       <p class="tl-role" data-i18n="exp.moc.role"></p>
@@ -301,7 +372,7 @@
         <li data-i18n="exp.moc.p2"></li>
       </ul>
     </div>
-
+ 
     <div class="tl-item">
       <p class="tl-date">2024.05 — 2024.11</p>
       <p class="tl-role" data-i18n="exp.cee.role"></p>
@@ -313,16 +384,16 @@
       </ul>
     </div>
   </section>
-
+ 
   <!-- PROJECTS -->
-  <section id="projects">
+  <section id="projects" class="reveal">
     <div class="sec-head">
-      <span class="sec-num">§04</span>
+      <span class="sec-num">04</span>
       <h2 class="sec-title" data-i18n="proj.title"></h2>
     </div>
-
-    <div class="proj-grid">
-
+ 
+    <div class="proj-grid reveal-stagger">
+ 
       <!-- Insurance LLM -->
       <div class="proj-card">
         <div class="proj-top">
@@ -340,7 +411,7 @@
           <a href="https://claim-intake-624489584685.asia-east1.run.app/" target="_blank" rel="noopener" data-i18n="proj.insurance.link"></a>
         </div>
       </div>
-
+ 
       <!-- Recommender system -->
       <div class="proj-card">
         <div class="proj-top">
@@ -354,7 +425,7 @@
           <li data-i18n="proj.recsys.p2"></li>
         </ul>
       </div>
-
+ 
       <!-- Club management system -->
       <div class="proj-card">
         <div class="proj-top">
@@ -369,7 +440,7 @@
           <li data-i18n="proj.club.p3"></li>
         </ul>
       </div>
-
+ 
       <!-- Hackathon -->
       <div class="proj-card">
         <div class="proj-top">
@@ -382,14 +453,14 @@
           <li data-i18n="proj.mrt.p1"></li>
         </ul>
       </div>
-
+ 
     </div>
   </section>
-
+ 
   <!-- RESEARCH -->
-  <section id="research">
+  <section id="research" class="reveal">
     <div class="sec-head">
-      <span class="sec-num">§05</span>
+      <span class="sec-num">05</span>
       <h2 class="sec-title" data-i18n="research.title"></h2>
     </div>
     <div class="paper">
@@ -401,14 +472,14 @@
       <p class="paper-desc" data-i18n="research.p2.desc"></p>
     </div>
   </section>
-
+ 
   <!-- CONTACT -->
-  <section id="contact">
+  <section id="contact" class="reveal">
     <div class="sec-head">
-      <span class="sec-num">§06</span>
+      <span class="sec-num">06</span>
       <h2 class="sec-title" data-i18n="contact.title"></h2>
     </div>
-    <div class="contact-grid">
+    <div class="contact-grid reveal-stagger">
       <div class="contact-card">
         <span class="contact-label">Email</span>
         <span class="contact-value"><a href="mailto:hsiaopeihsuan0627@gmail.com">hsiaopeihsuan0627@gmail.com</a></span>
@@ -423,19 +494,19 @@
       </div>
     </div>
   </section>
-
+ 
 </main>
-
+ 
 <footer>
   <span data-i18n="footer.text"></span>
 </footer>
-
+ 
 <script>
 const i18n = {
   zh: {
     "hero.eyebrow": "人工智慧 ｜ 邏輯 ｜ 系統開發",
-    "hero.title": "蕭姵萱<br><em>用哲學的邏輯，寫 AI 的系統。</em>",
-    "hero.bio": "東吳大學資訊管理與哲學雙主修、輔修工業工程。擅長將<span class=\"mark\">哲學的嚴謹邏輯分析</span>應用於 AI 系統開發，在交通部運輸研究所實習期間，成功導入 RAG 技術優化行政自動化流程。目前正領導推薦系統畢業專題研究，並與財務工程學系跨系合作開發 LLM 保險核算系統。",
+    "hero.title": "蕭姵萱",
+    "hero.bio": "雙主修於東吳大學資訊管理與哲學、輔修工業工程。在交通部運輸研究所實習期間，成功導入 <span class=\"mark\">RAG 技術</span>優化行政自動化流程。目前正進行推薦系統畢業專題研究，並與財務工程學系跨系合作開發 LLM 保險核算系統。",
     "hero.linkEmail": "寄信給我",
     "hero.linkProjects": "查看專案 ↓",
     "about.title": "自我介紹與技能",
@@ -498,8 +569,8 @@ const i18n = {
   },
   en: {
     "hero.eyebrow": "Artificial Intelligence · Logic · Systems",
-    "hero.title": "Pei-Hsuan Hsiao<br><em>Writing AI systems with a philosopher's logic.</em>",
-    "hero.bio": "Double major in Information Management &amp; Philosophy, minoring in Industrial Engineering at Soochow University. I apply <span class=\"mark\">rigorous philosophical logic</span> to AI system design — during my internship at the Institute of Transportation (MOTC), I implemented RAG to streamline document generation and retrieval. I currently lead a recommendation-systems research project and collaborate with the Department of Financial Engineering on an LLM-based insurance underwriting system.",
+    "hero.title": "Pei-Hsuan Hsiao",
+    "hero.bio": "Double major in Information Management &amp; Philosophy at Soochow University, minoring in Industrial Engineering. During my internship at the Institute of Transportation (MOTC), I successfully implemented <span class=\"mark\">RAG technology</span> to streamline administrative automation. I'm currently working on my capstone research in recommendation systems, and collaborating with the Department of Financial Engineering on an LLM-based insurance underwriting system.",
     "hero.linkEmail": "Email me",
     "hero.linkProjects": "See projects ↓",
     "about.title": "About &amp; Skills",
@@ -510,7 +581,7 @@ const i18n = {
     "about.otherLabel": "Analysis &amp; Design",
     "edu.title": "Education",
     "edu.soochow.school": "Soochow University",
-    "edu.soochow.detail": "B.S. Information Management · Double major in Philosophy · Minor in Industrial Engineering",
+    "edu.soochow.detail": "B.A. Information Management · Double major in Philosophy · Minor in Industrial Engineering",
     "edu.hk.school": "The Education University of Hong Kong",
     "edu.hk.detail": "Summer Exchange Program · AI-related coursework and cross-cultural collaboration",
     "exp.title": "Experience",
@@ -561,12 +632,12 @@ const i18n = {
     "footer.text": "Pei-Hsuan Hsiao · Built to honestly document real work"
   }
 };
-
+ 
 const langChips = {
   zh: ["英文（流利）","中文（母語）","台語（流利）","粵語（中等）"],
   en: ["English (Fluent)","Mandarin (Native)","Taiwanese (Fluent)","Cantonese (Intermediate)"]
 };
-
+ 
 function applyLang(lang){
   document.documentElement.setAttribute('data-lang', lang);
   document.documentElement.lang = lang === 'zh' ? 'zh-Hant' : 'en';
@@ -585,18 +656,36 @@ function applyLang(lang){
   document.getElementById('btn-en').classList.toggle('active', lang==='en');
   document.title = lang === 'zh' ? '蕭姵萱 Pei-Hsuan Hsiao — AI × 邏輯' : 'Pei-Hsuan Hsiao — AI × Logic';
 }
-
+ 
 function setLang(lang){
   applyLang(lang);
   try{ localStorage.setItem('site-lang', lang); }catch(e){}
 }
-
+ 
 (function init(){
   let saved = 'zh';
   try{ saved = localStorage.getItem('site-lang') || 'zh'; }catch(e){}
   applyLang(saved);
 })();
+ 
+(function initReveal(){
+  const targets = document.querySelectorAll('.reveal, .reveal-stagger');
+  if(!('IntersectionObserver' in window)){
+    targets.forEach(el=>el.classList.add('is-visible'));
+    return;
+  }
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('is-visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold:0.12, rootMargin:'0px 0px -40px 0px' });
+  targets.forEach(el=>io.observe(el));
+})();
 </script>
-
+ 
 </body>
 </html>
+ 
